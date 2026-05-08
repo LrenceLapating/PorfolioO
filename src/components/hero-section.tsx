@@ -1,16 +1,27 @@
 'use client'
 
-import { motion } from 'framer-motion'
+import { motion, useScroll, useTransform } from 'framer-motion'
 import { Linkedin, Mail, Github, Facebook } from 'lucide-react'
-import { SplineScene } from '@/components/ui/spline'
 import { Card } from '@/components/ui/card'
 import { Spotlight } from '@/components/ui/spotlight'
 import ConfettiBackground from '@/components/ui/confetti-background'
 import { Chatbot } from '@/components/ui/chatbot'
+import { useRef } from 'react'
 
 export function HeroSection() {
+  const sectionRef = useRef<HTMLElement>(null)
+  
+  // Track scroll progress for this section
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start start", "end start"]
+  })
+  
+  // Only fade out when scrolling past the hero section
+  const opacity = useTransform(scrollYProgress, [0, 0.8, 1], [1, 1, 0])
+  
   return (
-    <section className="min-h-screen relative flex items-center justify-center overflow-hidden">
+    <section id="home" ref={sectionRef} className="min-h-screen relative flex items-center justify-center overflow-hidden">
       <Card className="w-full h-screen bg-black dark:bg-black/[0.96] bg-white/[0.96] relative overflow-hidden border-0 rounded-none">
         {/* Confetti Background */}
         <ConfettiBackground />
@@ -20,20 +31,10 @@ export function HeroSection() {
           fill="white"
         />
         
-        <div className="relative w-full h-full">
-          {/* 3D Scene */}
-          <motion.div
-            className="absolute inset-0 w-full h-full"
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 0.5, duration: 1 }}
-          >
-            <SplineScene
-              scene="https://prod.spline.design/kZDDjO5HuC9GJUM2/scene.splinecode"
-              className="w-full h-full"
-            />
-          </motion.div>
-
+        <motion.div 
+          style={{ opacity }}
+          className="relative w-full h-full"
+        >
           {/* Text Content */}
           <div className="absolute left-0 top-0 bottom-0 w-full md:w-3/4 lg:w-1/2 p-4 md:p-8 lg:p-16 z-10 flex flex-col justify-center pointer-events-none">
             <motion.div
@@ -145,7 +146,7 @@ export function HeroSection() {
               </motion.div>
             </motion.div>
           </div>
-        </div>
+        </motion.div>
       </Card>
       
       {/* AI Chatbot */}

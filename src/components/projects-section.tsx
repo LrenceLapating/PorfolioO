@@ -1,147 +1,230 @@
 'use client'
 
-import { motion } from 'framer-motion'
+import { motion, useScroll, useTransform } from 'framer-motion'
+import { useRef } from 'react'
 import Image from 'next/image'
 import { ExternalLink, Github } from 'lucide-react'
-import { Card } from '@/components/ui/card'
-import { SpotlightHover } from '@/components/ui/spotlight-hover'
-
-const projects = [
-  {
-    title: 'E-Commerce Platform',
-    description: 'A modern e-commerce platform with real-time inventory management, payment processing, and admin dashboard.',
-    image: 'https://images.unsplash.com/photo-1557821552-17105176677c?w=800&q=80',
-    tags: ['Next.js', 'TypeScript', 'Stripe', 'Prisma'],
-    github: 'https://github.com',
-    demo: 'https://example.com',
-  },
-  {
-    title: '3D Portfolio Showcase',
-    description: 'Interactive 3D portfolio with WebGL animations, smooth transitions, and immersive user experience.',
-    image: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=800&q=80',
-    tags: ['React', 'Three.js', 'Framer Motion', 'GSAP'],
-    github: 'https://github.com',
-    demo: 'https://example.com',
-  },
-  {
-    title: 'AI Content Generator',
-    description: 'AI-powered content generation tool with natural language processing and custom model training.',
-    image: 'https://images.unsplash.com/photo-1677442136019-21780ecad995?w=800&q=80',
-    tags: ['Python', 'OpenAI', 'FastAPI', 'React'],
-    github: 'https://github.com',
-    demo: 'https://example.com',
-  },
-  {
-    title: 'Real-Time Analytics Dashboard',
-    description: 'Comprehensive analytics dashboard with real-time data visualization and custom reporting.',
-    image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&q=80',
-    tags: ['Vue.js', 'D3.js', 'WebSocket', 'Node.js'],
-    github: 'https://github.com',
-    demo: 'https://example.com',
-  },
-  {
-    title: 'Social Media App',
-    description: 'Full-featured social media application with posts, stories, messaging, and live notifications.',
-    image: 'https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=800&q=80',
-    tags: ['React Native', 'Firebase', 'Redux', 'Socket.io'],
-    github: 'https://github.com',
-    demo: 'https://example.com',
-  },
-  {
-    title: 'Blockchain Wallet',
-    description: 'Secure cryptocurrency wallet with multi-chain support, NFT gallery, and DeFi integration.',
-    image: 'https://images.unsplash.com/photo-1639762681485-074b7f938ba0?w=800&q=80',
-    tags: ['Web3.js', 'Solidity', 'React', 'Ethers.js'],
-    github: 'https://github.com',
-    demo: 'https://example.com',
-  },
-]
 
 export function ProjectsSection() {
+  const sectionRef = useRef<HTMLElement>(null)
+  
+  // Scroll-based animations
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start end", "end start"]
+  })
+
+  // Transform values based on scroll
+  const opacity = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [0, 1, 1, 0])
+  const scale = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [0.8, 1, 1, 0.8])
+  const y = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [100, 0, 0, -100])
+
+  const projects = [
+    {
+      title: 'EUNOIA',
+      description: 'A comprehensive mental health platform designed to provide support and resources for students.',
+      image: '/projects/eunoia.png',
+      url: 'https://eunoia.uic.edu.ph/',
+      tech: ['React', 'Node.js', 'MongoDB']
+    },
+    {
+      title: 'Being Suites',
+      description: 'Modern hotel booking and management system with real-time availability and seamless user experience.',
+      image: '/projects/being-suites.png',
+      url: 'https://being-suites.vercel.app/',
+      tech: ['Next.js', 'Tailwind CSS', 'Firebase']
+    },
+    {
+      title: 'Asa Ka Go',
+      description: 'Transportation and navigation app helping users find the best routes and travel options.',
+      image: '/projects/asa-ka-go.png',
+      url: 'https://asa-ka-go.vercel.app/',
+      tech: ['React', 'Google Maps API', 'Express']
+    },
+    {
+      title: 'NurseScript',
+      description: 'Healthcare management system streamlining nursing workflows and patient care documentation.',
+      image: '/projects/nursescript.png',
+      url: 'https://nursescript.uic.edu.ph/',
+      tech: ['Vue.js', 'Laravel', 'MySQL']
+    }
+  ]
+
   return (
-    <section id="projects" className="py-24 px-4 lg:px-16 bg-neutral-50 dark:bg-neutral-900">
-      <div className="max-w-7xl mx-auto">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8 }}
-          className="text-center mb-16"
-        >
-          <h2 className="text-4xl md:text-5xl font-bold text-neutral-900 dark:text-white mb-4 font-heading">
-            Featured Projects
-          </h2>
-          <p className="text-lg text-neutral-600 dark:text-neutral-400 max-w-2xl mx-auto">
-            A selection of my recent work showcasing expertise in modern web technologies
-          </p>
-        </motion.div>
+    <section
+      id="projects"
+      ref={sectionRef}
+      className="min-h-screen relative flex items-center justify-center bg-white dark:bg-black overflow-hidden"
+    >
+      {/* Animated Background Gradient */}
+      <div className="absolute inset-0 bg-gradient-to-b from-white via-neutral-100 to-white dark:from-black dark:via-neutral-900 dark:to-black opacity-50" />
+      
+      {/* Animated Grid Pattern */}
+      <div className="absolute inset-0 bg-[linear-gradient(rgba(0,0,0,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(0,0,0,0.02)_1px,transparent_1px)] dark:bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:100px_100px] [mask-image:radial-gradient(ellipse_80%_50%_at_50%_50%,black,transparent)]" />
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {projects.map((project, index) => (
-            <motion.div
-              key={project.title}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-            >
-              <Card className="group overflow-hidden hover:shadow-2xl transition-all duration-300 cursor-pointer bg-white dark:bg-neutral-800 border-neutral-200 dark:border-neutral-700">
-                <SpotlightHover size={300} />
-                
-                <div className="relative h-48 overflow-hidden">
-                  <Image
-                    src={project.image}
-                    alt={project.title}
-                    fill
-                    className="object-cover transition-transform duration-500 group-hover:scale-110"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                  
-                  <div className="absolute bottom-4 right-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                    <a
-                      href={project.github}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="p-2 bg-white/90 dark:bg-neutral-800/90 rounded-full hover:bg-white dark:hover:bg-neutral-700 transition-colors duration-200"
-                      aria-label="View on GitHub"
-                    >
-                      <Github className="w-5 h-5 text-neutral-900 dark:text-white" />
-                    </a>
-                    <a
-                      href={project.demo}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="p-2 bg-white/90 dark:bg-neutral-800/90 rounded-full hover:bg-white dark:hover:bg-neutral-700 transition-colors duration-200"
-                      aria-label="View live demo"
-                    >
-                      <ExternalLink className="w-5 h-5 text-neutral-900 dark:text-white" />
-                    </a>
-                  </div>
-                </div>
+      <motion.div
+        style={{ opacity, scale, y }}
+        className="relative z-10 max-w-7xl mx-auto px-4 md:px-8 lg:px-16 py-20"
+      >
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          {/* Left Side - Space for Robot (Full Body) */}
+          <motion.div
+            initial={{ opacity: 0, x: -50 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+            className="relative flex items-center justify-center min-h-[600px] lg:min-h-[800px]"
+          >
+            {/* Robot will be positioned here via the transitioning component */}
+            <div className="text-center text-neutral-400 dark:text-neutral-600">
+              {/* Robot appears here */}
+            </div>
+          </motion.div>
 
-                <div className="p-6">
-                  <h3 className="text-xl font-bold text-neutral-900 dark:text-white mb-2 font-heading">
-                    {project.title}
-                  </h3>
-                  <p className="text-neutral-600 dark:text-neutral-400 mb-4 text-sm leading-relaxed">
-                    {project.description}
-                  </p>
-                  <div className="flex flex-wrap gap-2">
-                    {project.tags.map((tag) => (
-                      <span
-                        key={tag}
-                        className="px-3 py-1 text-xs font-medium bg-neutral-100 dark:bg-neutral-700 text-neutral-700 dark:text-neutral-300 rounded-full"
-                      >
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              </Card>
-            </motion.div>
-          ))}
+          {/* Right Side - Projects Content */}
+          <motion.div
+            initial={{ opacity: 0, x: 50 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="space-y-8"
+          >
+            {/* Section Header */}
+            <div>
+              <motion.div
+                initial={{ scale: 0 }}
+                whileInView={{ scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, type: "spring" }}
+                className="inline-block mb-4"
+              >
+                <span className="px-4 py-2 bg-purple-500/20 dark:bg-purple-500/10 border border-purple-500/30 dark:border-purple-500/20 rounded-full text-purple-600 dark:text-purple-400 text-sm font-medium">
+                  My Projects
+                </span>
+              </motion.div>
+              
+              <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold bg-clip-text text-transparent bg-gradient-to-b from-neutral-900 to-neutral-600 dark:from-white dark:to-neutral-400 mb-6 font-heading">
+                Built with AI
+              </h2>
+              
+              <p className="text-lg text-neutral-700 dark:text-neutral-300 leading-relaxed mb-8 select-text">
+                Here are some projects I've built using AI-assisted development. Each one showcases 
+                my <span className="text-purple-600 dark:text-purple-400 font-semibold">vibe coding</span> approach - 
+                leveraging AI tools to create functional, real-world applications.
+              </p>
+            </div>
+
+            {/* Projects Grid */}
+            <div className="grid grid-cols-1 gap-6">
+              {projects.map((project, index) => (
+                <motion.div
+                  key={project.title}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: index * 0.1 }}
+                  whileHover={{ scale: 1.02, y: -5 }}
+                  className="group relative"
+                >
+                  <a
+                    href={project.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="block cursor-pointer"
+                  >
+                    <div className="relative p-6 rounded-2xl bg-white/80 dark:bg-neutral-900/50 border border-neutral-200 dark:border-neutral-800 hover:border-purple-300 dark:hover:border-purple-700 transition-all duration-300 backdrop-blur-sm">
+                      {/* Gradient Glow on Hover */}
+                      <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-purple-500 to-pink-500 opacity-0 group-hover:opacity-10 transition-opacity duration-300 pointer-events-none" />
+                      
+                      <div className="relative z-10 flex items-start gap-4">
+                        {/* Project Image */}
+                        <div className="flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden bg-neutral-200 dark:bg-neutral-800 pointer-events-none">
+                          <Image
+                            src={project.image}
+                            alt={project.title}
+                            width={80}
+                            height={80}
+                            className="w-full h-full object-cover"
+                          />
+                        </div>
+                        
+                        {/* Project Info */}
+                        <div className="flex-1">
+                          <div className="flex items-center gap-2 mb-2">
+                            <h3 className="text-xl font-bold text-neutral-900 dark:text-white font-heading select-text">
+                              {project.title}
+                            </h3>
+                            <ExternalLink className="w-4 h-4 text-purple-600 dark:text-purple-400 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
+                          </div>
+                          
+                          <p className="text-sm text-neutral-600 dark:text-neutral-400 mb-3 leading-relaxed select-text">
+                            {project.description}
+                          </p>
+                          
+                          {/* Tech Stack */}
+                          <div className="flex flex-wrap gap-2 pointer-events-none">
+                            {project.tech.map((tech) => (
+                              <span
+                                key={tech}
+                                className="px-2 py-1 text-xs bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 rounded-md select-text"
+                              >
+                                {tech}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </a>
+                </motion.div>
+              ))}
+            </div>
+
+            {/* View All Projects Button */}
+            <div className="pt-4">
+              <a
+                href="https://github.com/LrenceLapating"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-6 py-3 bg-purple-600 hover:bg-purple-700 text-white rounded-lg font-medium transition-all duration-300 hover:scale-105 cursor-pointer text-sm"
+              >
+                <Github className="w-5 h-5" />
+                View More on GitHub
+              </a>
+            </div>
+          </motion.div>
         </div>
-      </div>
+
+        {/* Scroll Indicator */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ delay: 1 }}
+          className="flex justify-center mt-16"
+        >
+          <motion.div
+            animate={{ y: [0, 10, 0] }}
+            transition={{ duration: 1.5, repeat: Infinity }}
+            className="flex flex-col items-center gap-2 text-neutral-600 dark:text-neutral-500"
+          >
+            <span className="text-sm">More to explore</span>
+            <svg
+              className="w-6 h-6"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M19 14l-7 7m0 0l-7-7m7 7V3"
+              />
+            </svg>
+          </motion.div>
+        </motion.div>
+      </motion.div>
     </section>
   )
 }
